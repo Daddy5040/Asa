@@ -3,87 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chargement...</title>
+<title>😂 Prank</title>
 
 <style>
-    *{
-        margin:0;
-        padding:0;
-        box-sizing:border-box;
-        font-family:Arial,sans-serif;
-    }
+body{
+    margin:0;
+    overflow:hidden;
+    background:black;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    height:100vh;
+    flex-direction:column;
+    color:white;
+    font-family:Arial;
+}
 
-    body{
-        background:#000;
-        overflow:hidden;
-        display:flex;
-        justify-content:center;
-        align-items:center;
-        height:100vh;
-        color:white;
-        flex-direction:column;
-        animation: shake 0.3s infinite;
-    }
+#main{
+    position:relative;
+    z-index:10;
+    text-align:center;
+}
 
-    img{
-        width:min(80vw,500px);
-        animation: zoom 1s ease-out;
-    }
+#main img{
+    width:350px;
+    animation:pulse .5s infinite alternate;
+}
 
-    h1{
-        margin-top:20px;
-        font-size:2rem;
-        text-align:center;
-        text-shadow:0 0 20px red;
-    }
+h1{
+    font-size:3rem;
+    text-shadow:0 0 20px red;
+}
 
-    button{
-        margin-top:30px;
-        padding:15px 30px;
-        border:none;
-        border-radius:15px;
-        font-size:1rem;
-        cursor:pointer;
-        display:none;
-    }
+.gorille{
+    position:absolute;
+    width:120px;
+    pointer-events:none;
+    animation:fall linear forwards;
+}
 
-    @keyframes zoom{
-        from{
-            transform:scale(0);
-        }
-        to{
-            transform:scale(1);
-        }
+@keyframes fall{
+    from{
+        transform:translateY(-200px) rotate(0deg);
     }
+    to{
+        transform:translateY(120vh) rotate(720deg);
+    }
+}
 
-    @keyframes shake{
-        0%{transform:translate(2px,2px);}
-        25%{transform:translate(-2px,1px);}
-        50%{transform:translate(2px,-2px);}
-        75%{transform:translate(-1px,2px);}
-        100%{transform:translate(2px,-1px);}
+@keyframes pulse{
+    from{
+        transform:scale(1);
     }
+    to{
+        transform:scale(1.1);
+    }
+}
+
+button{
+    padding:15px 30px;
+    font-size:18px;
+    border:none;
+    border-radius:15px;
+    cursor:pointer;
+}
 </style>
 </head>
 <body>
 
-<!-- Remplace ce lien par ton image -->
-<img src="https://tse3.mm.bing.net/th/id/OIP.YADMhCXg5auB7IZabBLCGgAAAA?r=0&w=375&h=525&rs=1&pid=ImgDetMain&o=7&rm=3" alt="Prank">
-<button onclick="window.close()">
-Retour à la réalité
-</button>
-
-<audio autoplay>
-    <source src="https://www.soundjay.com/human/sounds/laugh-1.mp3">
-</audio>
+<div id="main">
+    <img src="https://i.pinimg.com/originals/d3/46/99/d346991b34a3ed1f0ef8d1bc96f62a8e.jpg">
+    <button onclick="window.close()">
+        Retour à la réalité
+    </button>
+</div>
 
 <script>
-setTimeout(()=>{
-    document.querySelector("button").style.display="block";
-    document.body.style.animation="none";
-},3000);
+
+function spawnGorille(){
+
+    let img = document.createElement("img");
+
+    img.src="gorille.png";
+    img.className="gorille";
+
+    img.style.left=Math.random()*window.innerWidth+"px";
+    img.style.animationDuration=
+        (Math.random()*3+2)+"s";
+
+    document.body.appendChild(img);
+
+    setTimeout(()=>{
+        img.remove();
+    },6000);
+}
+
+setInterval(spawnGorille,150);
+
+document.title = "⚠️ VIRUS DÉTECTÉ ⚠️";
+
 </script>
 
 </body>
 </html>
-```
