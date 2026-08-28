@@ -650,7 +650,7 @@ function finalExplosion() {
 /* ======================================
    QUITTER LE PRANK
 ====================================== */
-
+const exitButton = document.getElementById("exit"); /* Distance à laquelle le bouton commence à fuir */ const escapeDistance = 120; function moveButton() { const buttonWidth = exitButton.offsetWidth; const buttonHeight = exitButton.offsetHeight; /* Limites de déplacement : le bouton reste toujours visible */ const maxX = window.innerWidth - buttonWidth - 20; const maxY = window.innerHeight - buttonHeight - 20; const minX = 20; const minY = 20; /* Nouvelle position aléatoire */ const newX = Math.floor( Math.random() * (maxX - minX) + minX ); const newY = Math.floor( Math.random() * (maxY - minY) + minY ); /* Le bouton passe en position fixe pour pouvoir se déplacer librement */ exitButton.style.position = "fixed"; exitButton.style.left = newX + "px"; exitButton.style.top = newY + "px"; /* Petit effet de rotation */ const rotation = Math.floor(Math.random() * 30) - 15; exitButton.style.transform = `rotate(${rotation}deg)`; } /* Déplacement dès que la souris entre dans la zone du bouton */ exitButton.addEventListener( "mouseenter", moveButton ); /* Sécurité supplémentaire : si le curseur s'approche très près du bouton, il s'enfuit. */ document.addEventListener("mousemove", (event) => { const rect = exitButton.getBoundingClientRect(); const buttonCenterX = rect.left + rect.width / 2; const buttonCenterY = rect.top + rect.height / 2; const distance = Math.sqrt( Math.pow(event.clientX - buttonCenterX, 2) + Math.pow(event.clientY - buttonCenterY, 2) ); if (distance < escapeDistance) { moveButton(); } });
 document.getElementById("exit")
     .addEventListener("click", () => {
 
