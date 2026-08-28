@@ -1,108 +1,722 @@
+```html
 <!DOCTYPE html>
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>😂 Prank</title>
+
+<title>Analyse système...</title>
 
 <style>
-body{
-    margin:0;
-    overflow:hidden;
-    background:black;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    height:100vh;
-    flex-direction:column;
-    color:white;
-    font-family:Arial;
+* {
+    box-sizing: border-box;
 }
 
-#main{
-    position:relative;
-    z-index:10;
-    text-align:center;
+html,
+body {
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: #000;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-#main img{
-    width:350px;
-    animation:pulse .5s infinite alternate;
+body {
+    color: white;
 }
 
-h1{
-    font-size:3rem;
-    text-shadow:0 0 20px red;
+/* =========================
+   ÉCRAN PRINCIPAL
+========================= */
+
+#prank {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background:
+        radial-gradient(circle at center, #260000 0%, #090000 45%, #000 100%);
+
+    transition: background .3s;
 }
 
-.gorille{
-    position:absolute;
-    width:120px;
-    pointer-events:none;
-    animation:fall linear forwards;
+#main {
+    width: min(700px, 90%);
+    text-align: center;
+    position: relative;
+    z-index: 20;
 }
 
-@keyframes fall{
-    from{
-        transform:translateY(-200px) rotate(0deg);
+/* =========================
+   IMAGE
+========================= */
+
+#mainImage {
+    width: min(360px, 70vw);
+    max-height: 45vh;
+    object-fit: contain;
+
+    border-radius: 15px;
+
+    filter:
+        drop-shadow(0 0 10px red)
+        drop-shadow(0 0 35px rgba(255,0,0,.6));
+
+    animation:
+        pulse .5s infinite alternate,
+        shake .08s infinite;
+}
+
+/* =========================
+   TEXTES
+========================= */
+
+h1 {
+    margin: 20px 0 10px;
+
+    color: #ff1a1a;
+
+    font-size: clamp(2rem, 6vw, 4rem);
+
+    text-transform: uppercase;
+
+    text-shadow:
+        0 0 5px red,
+        0 0 20px red,
+        0 0 50px red;
+
+    animation: glitch .15s infinite;
+}
+
+#status {
+    font-family: monospace;
+    color: #ff8080;
+    font-size: 16px;
+    min-height: 25px;
+}
+
+#progressContainer {
+    width: min(500px, 80vw);
+    height: 18px;
+
+    margin: 20px auto;
+
+    background: #1a1a1a;
+    border: 1px solid #550000;
+    border-radius: 20px;
+
+    overflow: hidden;
+}
+
+#progress {
+    width: 0%;
+    height: 100%;
+
+    background: linear-gradient(
+        90deg,
+        #700000,
+        #ff0000,
+        #ff4d4d
+    );
+
+    box-shadow: 0 0 15px red;
+
+    transition: width .1s linear;
+}
+
+#counter {
+    color: #ff4444;
+    font-family: monospace;
+    font-size: 14px;
+}
+
+/* =========================
+   BOUTON
+========================= */
+
+button {
+    margin-top: 25px;
+
+    padding: 14px 28px;
+
+    color: white;
+    background: #180000;
+
+    border: 1px solid #ff2222;
+    border-radius: 10px;
+
+    font-size: 16px;
+
+    cursor: pointer;
+
+    box-shadow: 0 0 15px rgba(255,0,0,.3);
+
+    transition: .2s;
+}
+
+button:hover {
+    background: #ff0000;
+    box-shadow: 0 0 30px red;
+    transform: scale(1.05);
+}
+
+/* =========================
+   GORILLES
+========================= */
+
+.gorille {
+    position: fixed;
+
+    width: var(--size);
+
+    left: var(--left);
+    top: -200px;
+
+    z-index: 50;
+
+    pointer-events: none;
+
+    filter:
+        drop-shadow(0 0 8px red);
+
+    animation:
+        fall var(--duration) linear forwards,
+        gorilleSpin var(--spin) linear infinite;
+}
+
+/* =========================
+   FLASH
+========================= */
+
+#flash {
+    position: fixed;
+    inset: 0;
+
+    z-index: 900;
+
+    background: white;
+
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* =========================
+   OVERLAY FINAL
+========================= */
+
+#final {
+    position: fixed;
+    inset: 0;
+
+    z-index: 2000;
+
+    display: none;
+
+    justify-content: center;
+    align-items: center;
+
+    background: rgba(0,0,0,.92);
+
+    text-align: center;
+}
+
+#final h2 {
+    color: red;
+
+    font-size: clamp(3rem, 10vw, 8rem);
+
+    margin: 0;
+
+    text-shadow:
+        0 0 10px red,
+        0 0 40px red;
+
+    animation: finalShake .05s infinite;
+}
+
+/* =========================
+   ANIMATIONS
+========================= */
+
+@keyframes pulse {
+    from {
+        transform: scale(1);
     }
-    to{
-        transform:translateY(120vh) rotate(720deg);
+
+    to {
+        transform: scale(1.08);
     }
 }
 
-@keyframes pulse{
-    from{
-        transform:scale(1);
+@keyframes shake {
+    0%   { margin-left: 0; }
+    25%  { margin-left: 2px; }
+    50%  { margin-left: -2px; }
+    75%  { margin-left: 1px; }
+    100% { margin-left: 0; }
+}
+
+@keyframes glitch {
+    0% {
+        transform: translate(0);
     }
-    to{
-        transform:scale(1.1);
+
+    25% {
+        transform: translate(-2px, 1px);
+    }
+
+    50% {
+        transform: translate(2px, -1px);
+    }
+
+    75% {
+        transform: translate(-1px, -2px);
+    }
+
+    100% {
+        transform: translate(0);
     }
 }
 
-button{
-    padding:15px 30px;
-    font-size:18px;
-    border:none;
-    border-radius:15px;
-    cursor:pointer;
+@keyframes fall {
+
+    0% {
+        transform:
+            translateY(-200px)
+            rotate(0deg)
+            scale(.5);
+    }
+
+    100% {
+        transform:
+            translateY(120vh)
+            rotate(720deg)
+            scale(1.2);
+    }
+}
+
+@keyframes gorilleSpin {
+    from {
+        rotate: 0deg;
+    }
+
+    to {
+        rotate: 360deg;
+    }
+}
+
+@keyframes finalShake {
+
+    0% {
+        transform: translate(0);
+    }
+
+    25% {
+        transform: translate(8px, -5px);
+    }
+
+    50% {
+        transform: translate(-8px, 5px);
+    }
+
+    75% {
+        transform: translate(5px, 8px);
+    }
+
+    100% {
+        transform: translate(0);
+    }
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media (max-width: 600px) {
+
+    #mainImage {
+        width: 280px;
+    }
+
+    #status {
+        font-size: 13px;
+    }
+
+    button {
+        font-size: 14px;
+    }
 }
 </style>
 </head>
+
 <body>
 
-<div id="main">
-    <img src="https://i.pinimg.com/originals/d3/46/99/d346991b34a3ed1f0ef8d1bc96f62a8e.jpg">
-    <button onclick="window.close()">
-        Retour à la réalité
-    </button>
+<div id="prank">
+
+    <div id="main">
+
+        <img
+            id="mainImage"
+            src="https://i.pinimg.com/originals/d3/46/99/d346991b34a3ed1f0ef8d1bc96f62a8e.jpg"
+            alt=""
+        >
+
+        <h1 id="title">
+            ANALYSE EN COURS...
+        </h1>
+
+        <div id="status">
+            Initialisation du diagnostic...
+        </div>
+
+        <div id="progressContainer">
+            <div id="progress"></div>
+        </div>
+
+        <div id="counter">
+            Analyse : 0%
+        </div>
+
+        <button id="exit">
+            Quitter le diagnostic
+        </button>
+
+    </div>
+
+</div>
+
+<div id="flash"></div>
+
+<div id="final">
+    <div>
+        <h2>😂 PRANK !</h2>
+
+        <button onclick="location.reload()">
+            Rejouer
+        </button>
+    </div>
 </div>
 
 <script>
 
-function spawnGorille(){
+/* ======================================
+   CONFIGURATION
+====================================== */
 
-    let img = document.createElement("img");
+const GORILLA_URL =
+    "https://i.pinimg.com/originals/d3/46/99/d346991b34a3ed1f0ef8d1bc96f62a8e.jpg";
 
-    img.src="https://i.pinimg.com/originals/d3/46/99/d346991b34a3ed1f0ef8d1bc96f62a8e.jpg";
-    img.className="gorille";
+const progress = document.getElementById("progress");
+const counter = document.getElementById("counter");
+const statusText = document.getElementById("status");
+const title = document.getElementById("title");
 
-    img.style.left=Math.random()*window.innerWidth+"px";
-    img.style.animationDuration=
-        (Math.random()*3+2)+"s";
+const flash = document.getElementById("flash");
+const finalScreen = document.getElementById("final");
+
+let percentage = 0;
+let prankActive = true;
+
+
+/* ======================================
+   FAUX MESSAGES SYSTÈME
+====================================== */
+
+const messages = [
+    "Initialisation du diagnostic...",
+    "Analyse de la mémoire système...",
+    "Vérification des processus actifs...",
+    "Analyse des fichiers temporaires...",
+    "Recherche d'anomalies...",
+    "Connexion au module de sécurité...",
+    "Analyse comportementale...",
+    "Erreur critique détectée...",
+    "Tentative de récupération...",
+    "ATTENTION : activité inhabituelle...",
+    "Propagation du problème...",
+    "Analyse presque terminée..."
+];
+
+
+/* ======================================
+   TITRE DU NAVIGATEUR
+====================================== */
+
+const titles = [
+    "Analyse système...",
+    "⚠️ Alerte détectée",
+    "⚠️ Erreur critique",
+    "🔴 Sécurité compromise",
+    "😂 PRANK"
+];
+
+let titleIndex = 0;
+
+setInterval(() => {
+
+    if (!prankActive) return;
+
+    document.title = titles[titleIndex];
+
+    titleIndex++;
+
+    if (titleIndex >= titles.length) {
+        titleIndex = 0;
+    }
+
+}, 500);
+
+
+/* ======================================
+   PROGRESSION
+====================================== */
+
+const progressInterval = setInterval(() => {
+
+    if (!prankActive) return;
+
+    percentage += Math.random() * 2.5;
+
+    if (percentage > 100) {
+        percentage = 100;
+    }
+
+    progress.style.width = percentage + "%";
+
+    counter.textContent =
+        "Analyse : " + Math.floor(percentage) + "%";
+
+    const index = Math.min(
+        messages.length - 1,
+        Math.floor(percentage / 9)
+    );
+
+    statusText.textContent = messages[index];
+
+    /*
+       Quand l'analyse dépasse 70%,
+       on commence à faire apparaître
+       les gorilles.
+    */
+
+    if (percentage > 70) {
+
+        const chance = Math.random();
+
+        if (chance > .45) {
+            spawnGorille();
+        }
+    }
+
+    if (percentage >= 100) {
+
+        clearInterval(progressInterval);
+
+        setTimeout(finalExplosion, 700);
+    }
+
+}, 180);
+
+
+/* ======================================
+   CRÉATION D'UN GORILLE
+====================================== */
+
+function spawnGorille() {
+
+    if (!prankActive) return;
+
+    const img = document.createElement("img");
+
+    img.src = GORILLA_URL;
+
+    img.className = "gorille";
+
+    /*
+       Taille aléatoire
+    */
+
+    const size =
+        Math.floor(Math.random() * 140) + 70;
+
+    /*
+       Position horizontale
+    */
+
+    const left =
+        Math.random() * 100;
+
+    /*
+       Durée de chute
+    */
+
+    const duration =
+        (Math.random() * 2.5 + 1.2).toFixed(2);
+
+    /*
+       Rotation
+    */
+
+    const spin =
+        (Math.random() * 1.5 + .5).toFixed(2);
+
+    img.style.setProperty(
+        "--size",
+        size + "px"
+    );
+
+    img.style.setProperty(
+        "--left",
+        left + "vw"
+    );
+
+    img.style.setProperty(
+        "--duration",
+        duration + "s"
+    );
+
+    img.style.setProperty(
+        "--spin",
+        spin + "s"
+    );
 
     document.body.appendChild(img);
 
-    setTimeout(()=>{
+    /*
+       Nettoyage automatique
+    */
+
+    setTimeout(() => {
         img.remove();
-    },6000);
+    }, 5000);
 }
 
-setInterval(spawnGorille,150);
 
-document.title = "⚠️ VIRUS DÉTECTÉ ⚠️";
+/* ======================================
+   EXPLOSION FINALE
+====================================== */
+
+function finalExplosion() {
+
+    if (!prankActive) return;
+
+    title.textContent = "!!! ALERTE !!!";
+
+    statusText.textContent =
+        "ACTIVITÉ INCONNUE DÉTECTÉE";
+
+    /*
+       Flash
+    */
+
+    flash.style.opacity = "1";
+
+    setTimeout(() => {
+        flash.style.opacity = "0";
+    }, 100);
+
+
+    /*
+       Spawn massif
+    */
+
+    for (let i = 0; i < 45; i++) {
+
+        setTimeout(() => {
+
+            spawnGorille();
+
+        }, i * 45);
+    }
+
+
+    /*
+       Affichage du message final
+    */
+
+    setTimeout(() => {
+
+        finalScreen.style.display = "flex";
+
+    }, 1800);
+}
+
+
+/* ======================================
+   QUITTER LE PRANK
+====================================== */
+
+document.getElementById("exit")
+    .addEventListener("click", () => {
+
+        prankActive = false;
+
+        clearInterval(progressInterval);
+
+        document
+            .querySelectorAll(".gorille")
+            .forEach(g => g.remove());
+
+        document.title = "😂 Rien à voir ici";
+
+        document.body.innerHTML = `
+            <div style="
+                width:100vw;
+                height:100vh;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                background:#111;
+                color:white;
+                font-family:Arial;
+                text-align:center;
+            ">
+                <div>
+                    <h1>😂 Tu as survécu.</h1>
+                    <p>C'était simplement un prank.</p>
+                </div>
+            </div>
+        `;
+
+    });
+
+
+/* ======================================
+   EMPÊCHER LES ACCIDENTS DE NAVIGATION
+====================================== */
+
+window.addEventListener("beforeunload", () => {
+    prankActive = false;
+});
+
+
+/* ======================================
+   DÉMARRAGE
+====================================== */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    /*
+       Petit délai pour laisser le suspense
+       s'installer avant le premier gorille.
+    */
+
+    setTimeout(() => {
+
+        statusText.textContent =
+            "Connexion au système de sécurité...";
+
+    }, 1200);
+
+});
 
 </script>
 
 </body>
 </html>
+```
